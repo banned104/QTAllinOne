@@ -5,19 +5,22 @@
 // #include <HuskarUI/husapp.h>
 #include "HuskarUI/include/husapp.h"
 #include "iostream"
+#include "src/OpenGL/opengl_item.hpp"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
-    /*! Set OpenGL, optional */
+    // 自动创建的QQuickWindow类
     QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
     QQuickWindow::setDefaultAlphaBuffer(true);
-
+    // 和Plugin一样, 在main.qml之前使用了, 所以需要在loadModule之前导入 OpenGLItem!!!
+    qmlRegisterType<OpenGLItem>( "lib.OpenGLItem", 1, 0, "OpenGLItem" );
     QQmlApplicationEngine engine;
     HusApp::initialize(&engine);
 
     // 获取应用程序目录，用于定位 HuskarUI 插件
-    QString appDir = QCoreApplication::applicationDirPath();
+    QString appDir = QCoreApplication::applicationDirPath();    // 也可以使用子类: QGuiApplication::applicationDirPath();
+
     std::cout << "Application Dir: " << appDir.toStdString() << std::endl;
 
     // 关键修复：必须在 loadFromModule 之前添加 Import Path

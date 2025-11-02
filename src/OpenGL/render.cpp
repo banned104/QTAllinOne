@@ -1,5 +1,14 @@
 #include "render.hpp"
 
+
+Render::Render() {
+    return;
+}
+
+Render::~Render() {
+
+}
+
 void Render::initializeGL() {
     initializeOpenGLFunctions();
     initializeShader();
@@ -14,6 +23,6 @@ void Render::resizeGL( int w, int h ) {
     glViewport(0, 0, w, h);
 }
 
-void Render::render() {
+void Render::render(){
 
 }

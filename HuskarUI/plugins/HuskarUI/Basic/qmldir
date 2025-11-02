@@ -62,5 +62,4 @@ HusPopconfirm 1.0 imports/HusPopconfirm.qml
 HusPopover 1.0 imports/HusPopover.qml
 HusModal 1.0 imports/HusModal.qml
 HusTextArea 1.0 imports/HusTextArea.qml
-depends QtQuick
 

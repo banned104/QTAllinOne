@@ -9,8 +9,8 @@
 class MyRenderer : public Render
 {
 public:
-    MyRenderer();
-    ~MyRenderer();
+    MyRenderer(){}
+    ~MyRenderer(){}
 
     void render() {
         // rgba

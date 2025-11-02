@@ -1,6 +1,6 @@
 <RCC>
   <qresource prefix="/">
-    <file alias="/HuskarUI/Basic">D:/QML/HuskarUITest/HuskarUI/HuskarUI/plugins/HuskarUI/Basic</file>
+    <file alias="/HuskarUI/Basic">F:/Codes/QML_OpenGL/HuskarUI/HuskarUI/plugins/HuskarUI/Basic</file>
 
   </qresource>
 </RCC>
