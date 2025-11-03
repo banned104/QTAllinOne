@@ -25,12 +25,12 @@ qt_add_qml_module(appQMLSQLite
 
 
 target_include_directories( appQMLSQLite PRIVATE HuskarUI/include)
-if (MSVC)
-target_link_directories(appQMLSQLite PRIVATE "D:/MySoftwares/QTCreator17/6.9.3/msvc2022_64/lib")
-else()
-# D:\MySoftwares\QTCreator17\6.9.3\mingw_64
-target_link_directories(appQMLSQLite PRIVATE "D:/MySoftwares/QTCreator17/6.9.3/mingw_64/lib")
-endif()
+# if (MSVC)
+# target_link_directories(appQMLSQLite PRIVATE "D:/MySoftwares/QTCreator17/6.9.3/msvc2022_64/lib")
+# else()
+# # D:\MySoftwares\QTCreator17\6.9.3\mingw_64
+# target_link_directories(appQMLSQLite PRIVATE "D:/MySoftwares/QTCreator17/6.9.3/mingw_64/lib")
+# endif()
 
 # target_link_libraries(appQMLSQLite PRIVATE HuskarUIBasicd)      # d 后缀 为Debug版本
 set(QML_IMPORT_PATH "${CMAKE_SOURCE_DIR}/HuskarUI/plugins" CACHE STRING "" FORCE)

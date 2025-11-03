@@ -1,18 +1,36 @@
 import QtQuick
 import HuskarUI.Basic
+import lib.OpenGLItem 1.0
 
 HusWindow {
     width: 640
     height: 480
     visible: true
     title: qsTr("Hello World")
-    HusButton {
-        id: mainButton;
-        width: 200; height: 50;
-        anchors.centerIn: parent;
-        text: "HuskarUI";
-    }
+    Rectangle{
+        anchors.fill: parent;
+        color: "lightblue";
+        HusButton {
+            id: mainButton;
+            width: 200; height: 50;
+            anchors.centerIn: parent;
+            text: "HuskarUI";
+        }
 
+
+        Rectangle {
+            border.width: 2;
+            border.color: "red";
+            width: 100; height: 100;
+            anchors.top: mainButton.bottom;
+            anchors.margins: 10;
+            anchors.horizontalCenter: mainButton.horizontalCenter;
+            OpenGLItem {
+                visible: true;
+                anchors.fill: parent;
+            }
+        }
+    }
     // HusCard{
     //     width: 200; height: 50;
     //     anchors.top: mainButton.bottom;
