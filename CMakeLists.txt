@@ -18,13 +18,21 @@ qt_add_qml_module(appQMLSQLite
     SOURCES
         src/OpenGL/opengl_item.cpp src/OpenGL/opengl_item.hpp
         src/OpenGL/render.cpp src/OpenGL/render.hpp
+        src/CPP/VirtualFunctionTest.hpp
+        src/CPP/FactoryTest.hpp
     QML_FILES
         Main.qml
+        src/QML_Files/Buttons/ThreeDSwitch.qml
+    RESOURCES
+        qml_files.qrc
 
 )
 
 
-target_include_directories( appQMLSQLite PRIVATE HuskarUI/include)
+target_include_directories( appQMLSQLite PRIVATE
+                        HuskarUI/include
+                        src/CPP/
+                    )
 # if (MSVC)
 # target_link_directories(appQMLSQLite PRIVATE "D:/MySoftwares/QTCreator17/6.9.3/msvc2022_64/lib")
 # else()

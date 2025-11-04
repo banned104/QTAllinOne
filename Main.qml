@@ -1,6 +1,7 @@
 import QtQuick
 import HuskarUI.Basic
 import lib.OpenGLItem 1.0
+import "src/QML_Files/Buttons"
 
 HusWindow {
     width: 640
@@ -8,6 +9,7 @@ HusWindow {
     visible: true
     title: qsTr("Hello World")
     Rectangle{
+        id: rect1;
         anchors.fill: parent;
         color: "lightblue";
         HusButton {
@@ -31,10 +33,10 @@ HusWindow {
             }
         }
     }
-    // HusCard{
-    //     width: 200; height: 50;
-    //     anchors.top: mainButton.bottom;
-    //     anchors.topMargin: 10;
-    // }
+
+    ThreeDSwitch {
+        anchors.top: rect1.bottom;
+        anchors.topMargin: 10;
+    }
 
 }

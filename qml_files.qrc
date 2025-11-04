@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file>Main.qml</file>
+        <file>src/QML_Files/Buttons/ThreeDSwitch.qml</file>
+    </qresource>
+    <qresource prefix="/images"/>
+</RCC>

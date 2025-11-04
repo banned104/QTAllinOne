@@ -7,6 +7,10 @@
 #include "iostream"
 #include "src/OpenGL/opengl_item.hpp"
 
+// 测试各种设计模式
+#include "src/CPP/VirtualFunctionTest.hpp"
+#include "src/CPP/FactoryTest.hpp"
+
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
@@ -40,6 +44,10 @@ int main(int argc, char *argv[])
     
     // 加载主 QML 文件（必须在 addImportPath 之后）
     engine.loadFromModule("QMLSQLite", "Main");
+
+    // 设计模式测试
+    useStrategyTest();
+    FactoryRender::createRenderer(_OPENGL_RENDER);
 
     return app.exec();
 }
