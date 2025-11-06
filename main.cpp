@@ -1,4 +1,4 @@
-1 #include<QGuiApplication>
+#include<QGuiApplication>
 #include <QDebug> // 添加调试输出支持
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
@@ -11,6 +11,9 @@
 // 测试各种设计模式
 #include "src/CPP/FactoryTest.hpp"
 #include "src/CPP/VirtualFunctionTest.hpp"
+
+// 测试菱形继承
+#include "src/CPP/VirtualInherit.hpp"
 
     int main(int argc, char *argv[]) {
   QGuiApplication app(argc, argv);
@@ -48,6 +51,8 @@
   // 设计模式测试
   useStrategyTest();
   FactoryRender::createRenderer(_OPENGL_RENDER);
+
+  TestEcho();
 
   return app.exec();
 }

@@ -20,6 +20,7 @@ qt_add_qml_module(appQMLSQLite
         src/OpenGL/render.cpp src/OpenGL/render.hpp
         src/CPP/VirtualFunctionTest.hpp
         src/CPP/FactoryTest.hpp
+        src/CPP/VirtualInherit.hpp
     QML_FILES
         Main.qml
         src/QML_Files/Buttons/ThreeDSwitch.qml
