@@ -15,7 +15,11 @@
 // 测试菱形继承
 #include "src/CPP/VirtualInherit.hpp"
 
-    int main(int argc, char *argv[]) {
+// 测试深拷贝
+#include "src/CPP/DeepCopy.hpp"
+
+
+int main(int argc, char *argv[]) {
   QGuiApplication app(argc, argv);
   // 自动创建的QQuickWindow类
   QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
@@ -49,10 +53,12 @@
   engine.loadFromModule("QMLSQLite", "Main");
 
   // 设计模式测试
-  useStrategyTest();
-  FactoryRender::createRenderer(_OPENGL_RENDER);
+  // useStrategyTest();
+  // FactoryRender::createRenderer(_OPENGL_RENDER);
 
-  TestEcho();
+  // TestEcho();
+
+  // TestStringClass();
 
   return app.exec();
 }

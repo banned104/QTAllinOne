@@ -14,7 +14,7 @@ public:
 
     void render() {
         // rgba
-        glClearColor( 0.1,0.1, 0.5, 1.0 );
+        glClearColor( 0.0, 0.0, 0.5, 1.0 );
         // 当前缓冲区颜色设置为刚才设置的清除颜色
         glClear( GL_COLOR_BUFFER_BIT );
     }
@@ -35,7 +35,7 @@ protected:
     void timeEvent( QTimerEvent* e );
 private:
     QBasicTimer m_timer;
-    Render *m_render;
+    MyRenderer *m_render;
 
 };
 

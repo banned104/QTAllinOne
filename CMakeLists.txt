@@ -21,6 +21,8 @@ qt_add_qml_module(appQMLSQLite
         src/CPP/VirtualFunctionTest.hpp
         src/CPP/FactoryTest.hpp
         src/CPP/VirtualInherit.hpp
+        src/CPP/DeepCopy.hpp
+        src/CPP/global_macro.hpp
     QML_FILES
         Main.qml
         src/QML_Files/Buttons/ThreeDSwitch.qml
@@ -31,8 +33,9 @@ qt_add_qml_module(appQMLSQLite
 
 
 target_include_directories( appQMLSQLite PRIVATE
-                        HuskarUI/include
-                        src/CPP/
+                        ${CMAKE_SOURCE_DIR}/src/CPP
+                        $<$<CONFIG:Debug>:${CMAKE_SOURCE_DIR}/HuskarUI_Debug/include>
+                        $<$<CONFIG:Release>:${CMAKE_SOURCE_DIR}/HuskarUI/include>
                     )
 # if (MSVC)
 # target_link_directories(appQMLSQLite PRIVATE "D:/MySoftwares/QTCreator17/6.9.3/msvc2022_64/lib")
@@ -43,7 +46,10 @@ target_include_directories( appQMLSQLite PRIVATE
 
 # target_link_libraries(appQMLSQLite PRIVATE HuskarUIBasicd)      # d 后缀 为Debug版本
 set(QML_IMPORT_PATH "${CMAKE_SOURCE_DIR}/HuskarUI/plugins" CACHE STRING "" FORCE)
-target_link_directories( appQMLSQLite PRIVATE HuskarUI/lib/bin)
+target_link_directories( appQMLSQLite PRIVATE 
+                $<$<CONFIG:Debug>:${CMAKE_SOURCE_DIR}/HuskarUI_Debug/lib/bin>
+                $<$<CONFIG:Release>:${CMAKE_SOURCE_DIR}/HuskarUI/lib/bin>
+                )
 target_link_libraries(appQMLSQLite PRIVATE HuskarUIBasic)      # d 后缀 为Debug版本
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

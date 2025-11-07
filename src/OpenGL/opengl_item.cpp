@@ -1,5 +1,10 @@
 #include "opengl_item.hpp"
+#include "global_macro.hpp"
 #include <QQuickWindow>
+#include <iostream>
+#include <string>
+
+
 
 OpenGLItem::OpenGLItem()
     : m_render( nullptr )
@@ -13,7 +18,9 @@ OpenGLItem::OpenGLItem()
             connect( window, &QQuickWindow::sceneGraphInvalidated, this, &OpenGLItem::cleanup,
                     Qt::DirectConnection );
             // window->setClearBeforeRendering( false );
+            PRINT_LOG("Window created");
         } else {
+            PRINT_LOG("Window was not created");
             return;
         }
     } );
@@ -27,7 +34,14 @@ void OpenGLItem::sync(){
     if ( !m_render ) {
         m_render = new MyRenderer();
         m_render->initializeGL();
-        m_render->resizeGL( window()->width(), window()->height() );
+        // m_render->resizeGL( window()->width(), window()->height() );
+        m_render->resizeGL( this->width(), this->height() );
+
+        PRINT_LOG( "Window height: " + std::to_string(window()->width())
+                + " Window width: " + std::to_string(window()->width()) );
+
+        PRINT_LOG( "Item height: " + std::to_string(this->width())
+                  + " Item width: " + std::to_string(this->width()) );
 
         connect( window(), &QQuickWindow::beforeRendering, this, [this](){
             m_render->render();
@@ -40,10 +54,10 @@ void OpenGLItem::sync(){
 
         // Resize Event
         connect( window(), &QQuickWindow::widthChanged, this, [this](){
-            m_render->resizeGL( window()->width(), window()->height() );
+            m_render->resizeGL( this->width(), this->height() );
         } );
         connect( window(), &QQuickWindow::heightChanged, this, [this](){
-            m_render->resizeGL( window()->width(), window()->height() );
+            m_render->resizeGL( this->width(), this->height() );
         } );
     }
 }
