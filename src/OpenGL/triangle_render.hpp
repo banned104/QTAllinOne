@@ -1,11 +1,11 @@
-#ifndef RENDER_H
-#define RENDER_H
+#pragma once
+#include "irenderer.hpp"
 #include <QOpenGLFunctions>
-class Render : protected QOpenGLFunctions
+class TriangleRender : protected QOpenGLFunctions, public IRenderer
 {
 public:
-    Render();
-    ~Render();
+    TriangleRender();
+    ~TriangleRender();
 
     virtual void initializeGL();
     virtual void initializeShader();
@@ -13,4 +13,4 @@ public:
     virtual void render();
 };
 
-#endif // RENDER_H
+

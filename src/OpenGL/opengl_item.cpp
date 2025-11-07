@@ -1,7 +1,6 @@
 #include "opengl_item.hpp"
 #include "global_macro.hpp"
 #include <QQuickWindow>
-#include <iostream>
 #include <string>
 
 

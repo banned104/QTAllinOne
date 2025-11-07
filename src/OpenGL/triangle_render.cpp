@@ -1,4 +1,4 @@
-#include "render.hpp"
+#include "triangle_render.hpp"
 
 
 Render::Render() {

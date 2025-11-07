@@ -17,17 +17,21 @@ qt_add_qml_module(appQMLSQLite
     VERSION 1.0
     SOURCES
         src/OpenGL/opengl_item.cpp src/OpenGL/opengl_item.hpp
-        src/OpenGL/render.cpp src/OpenGL/render.hpp
+        src/OpenGL/triangle_render.cpp src/OpenGL/triangle_render.hpp
         src/CPP/VirtualFunctionTest.hpp
         src/CPP/FactoryTest.hpp
         src/CPP/VirtualInherit.hpp
         src/CPP/DeepCopy.hpp
         src/CPP/global_macro.hpp
+        src/OpenGL/irenderer.hpp
+        src/OpenGL/render_context.hpp
+        src/OpenGL/render_config.hpp
     QML_FILES
         Main.qml
         src/QML_Files/Buttons/ThreeDSwitch.qml
     RESOURCES
         qml_files.qrc
+        Resources.qrc
 
 )
 

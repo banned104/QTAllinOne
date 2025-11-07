@@ -1,10 +1,12 @@
 #ifndef OPENGLWINDOW_H
 #define OPENGLWINDOW_H
 
-#include "render.hpp"
+#include "triangle_render.hpp"
 #include <QTime>
 #include <QQuickItem>
 #include <QBasicTimer>
+#include <QOpenGLBuffer>
+#include <QOpenGLShaderProgram>
 
 class MyRenderer : public Render
 {
@@ -36,6 +38,10 @@ protected:
 private:
     QBasicTimer m_timer;
     MyRenderer *m_render;
+
+    QOpenGLShaderProgram* m_program;
+    QOpenGLBuffer* m_vbo;
+    QMatrix4x4 m_projection;
 
 };
 
