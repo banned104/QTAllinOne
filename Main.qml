@@ -11,7 +11,7 @@ HusWindow {
     Rectangle{
         id: rect1;
         anchors.fill: parent;
-        color: "lightblue";
+        color: "grey";
         HusButton {
             id: mainButton;
             width: 200; height: 50;
