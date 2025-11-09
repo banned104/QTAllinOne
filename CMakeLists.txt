@@ -26,6 +26,7 @@ qt_add_qml_module(appQMLSQLite
         src/OpenGL/irenderer.hpp
         src/OpenGL/render_context.hpp
         src/OpenGL/render_config.hpp
+        src/OpenGL/render_factory.hpp
     QML_FILES
         Main.qml
         src/QML_Files/Buttons/ThreeDSwitch.qml

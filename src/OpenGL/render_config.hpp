@@ -57,12 +57,13 @@ public:
     static RenderConfig createTriangleConfig() {
         RenderConfig config;
 
-#ifdef Q_OS_ANDROID
+#ifdef Q_OS_WIN
+    config.setFragmentShaderPath(":/src/Shaders/triangle.frag.glsl")
+            .setVertexShaderPath(":/src/Shaders/triangle.vert.glsl");
+
+#else
         config.setFragmentShaderPath(":/src/Shaders/triangle.es.frag.glsl")
             .setVertexShaderPath(":/src/Shaders/triangle.es.vert.glsl");
-#else
-        config.setFragmentShaderPath(":/src/Shaders/triangle.frag.glsl")
-            .setVertexShaderPath(":/src/Shaders/triangle.vert.glsl");
 #endif
 
         std::vector<VertexData> vertices = {

@@ -8,41 +8,34 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
 
-class MyRenderer : public Render
-{
-public:
-    MyRenderer(){}
-    ~MyRenderer(){}
-
-    void render() {
-        // rgba
-        glClearColor( 0.0, 0.0, 0.5, 1.0 );
-        // 当前缓冲区颜色设置为刚才设置的清除颜色
-        glClear( GL_COLOR_BUFFER_BIT );
-    }
-};
-
-class OpenGLItem : public QQuickItem
-{
+class OpenGLItem : public QQuickItem {
     Q_OBJECT
+    Q_PROPERTY(int fps READ fps WRITE setFps NOTIFY fpsChanged FINAL)
+    Q_PROPERTY(QString renderType READ renderType WRITE setRenderType NOTIFY renderTypeChanged FINAL)
 
 public:
     OpenGLItem();
-    ~OpenGLItem();
+    ~OpenGLItem() override;
 
-public slots:
-    void sync();
-    void cleanup();
-protected:
-    void timeEvent( QTimerEvent* e );
+    // int fps()
+
 private:
+    void createRenderer();
+    void initializeRenderer();
+    void updateProjectMatrix();
+    void handleRenderError( RenderError error, const std::string& message );
+
+    std::unique_ptr<IRenderer> m_renderer;
+    RenderConfig m_config;
+    QMatrix4x4 m_projectionMatrix;
+
+    int m_fps;
+    QTime m_lastTime;
     QBasicTimer m_timer;
-    MyRenderer *m_render;
+    QString m_rendererType;
+    quint64 m_frameNumer;
 
-    QOpenGLShaderProgram* m_program;
-    QOpenGLBuffer* m_vbo;
-    QMatrix4x4 m_projection;
-
+    bool m_rendererInitialized;
 };
 
 #endif
