@@ -26,6 +26,8 @@ public:
     static std::unique_ptr<IRenderer> create( const std::string& typeName ) {
         if ( typeName == "triangle" ) {
             return create( RenderType::Triangle );
+        } else {
+            return nullptr;
         }
     }
 private:
