@@ -1,5 +1,6 @@
 #pragma once
 #include "irenderer.hpp"
+#include "triangle_render.hpp"
 #include <memory>
 
 enum class RenderType {
@@ -21,7 +22,15 @@ public:
             break;
         }
     }
+
+    static std::unique_ptr<IRenderer> create( const std::string& typeName ) {
+        if ( typeName == "triangle" ) {
+            return create( RenderType::Triangle );
+        }
+    }
 private:
     // 禁止实例化
     RenderFactory() = delete;
+    RenderFactory(const RenderFactory&) = delete;
+    RenderFactory& operator=(const RenderFactory&) = delete;
 };

@@ -4,6 +4,10 @@ project(QMLSQLite VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
 find_package(Qt6 REQUIRED COMPONENTS Quick OpenGL)
 
 qt_standard_project_setup(REQUIRES 6.8)

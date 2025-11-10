@@ -1,5 +1,8 @@
 #pragma once
 #include "irenderer.hpp"
+#include "render_config.hpp"
+#include "render_context.hpp"
+
 #include <QOpenGLFunctions>
 #include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
@@ -29,6 +32,7 @@ private:
     QVector4D m_clearColor;
     float m_rotationSpeed;
     float m_currentAngle;
+    int m_vertexCount;
 
     ErrorCallback m_errorCallback;
     bool m_initialized;

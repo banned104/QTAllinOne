@@ -17,13 +17,38 @@ public:
     OpenGLItem();
     ~OpenGLItem() override;
 
-    // int fps()
+    int fps() const { return m_fps; }
+    void setFps( int f );
+
+    QString renderType() const { return m_rendererType; }
+    void setRenderType( const QString& type );
+
+    // 依赖注入接口
+    void setRenderer(std::unique_ptr<IRenderer> renderer);
+
+    // 配置接口
+    void setRenderConfig( const RenderConfig& config );
+
+signals:
+    void fpsChanged();
+    void renderTypeChanged();
+    void renderError( const QString& message );
+
+public slots:
+    void sync();
+    void cleanup();
+
+protected:
+    void timerEvent( QTimerEvent* event ) override;
+    void geometryChange( const QRectF& newGeometry, const QRectF& oldGeometry ) override;
+
 
 private:
     void createRenderer();
     void initializeRenderer();
     void updateProjectMatrix();
     void handleRenderError( RenderError error, const std::string& message );
+    void handleResize();
 
     std::unique_ptr<IRenderer> m_renderer;
     RenderConfig m_config;

@@ -5,6 +5,7 @@
 #include <functional>
 #include <string>
 
+// 前向声明
 class RenderContext;
 class RenderConfig;
 
