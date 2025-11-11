@@ -48,15 +48,20 @@ void OpenGLItemRenderer::render() {
 
     }
 
-    // 触发下一帧
+    // 触发下一帧 "Call this function when the FBO should be renderered angain."
     update();
 }
 
+// 第一帧的时候调用  如果设置 QQuickFramebufferObject::textureFollowsItemSize(true); 就会在每次组件大小改变时调用这个 createFrameBuffer
 QOpenGLFramebufferObject* OpenGLItemRenderer::createFramebufferObject( const QSize& size  ) {
     // 创建FBO 当尺寸变化时调用
     QOpenGLFramebufferObjectFormat format;
     format.setAttachment( QOpenGLFramebufferObject::CombinedDepthStencil );
     format.setSamples(4);   // 4x MSAA抗锯齿
+
+    // non-static 但是设置这个 "纹理跟随Item大小变化" 可以让组件大小变化时 FBO渲染出来的纹理大小随之改变
+    // QQuickFramebufferObject::textureFollowsItemSize(true);
+
 
     // 更新投影矩阵
     updateProjectMatrix(size);
@@ -134,6 +139,8 @@ void OpenGLItemRenderer::initializeRenderer() {
     }
 }
 
+
+// 修改组件宽高之后重新计算矩阵 矩阵会在每一帧参与计算 RenderContext
 void OpenGLItemRenderer::updateProjectMatrix( const QSize& size ) {
     if ( size.width() <= 0 || size.height() <= 0 ) {
         return;

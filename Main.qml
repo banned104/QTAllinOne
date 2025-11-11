@@ -21,6 +21,7 @@ HusWindow {
 
 
         Rectangle {
+            color: "transparent";
             border.width: 2;
             border.color: "red";
             width: 100; height: 100;

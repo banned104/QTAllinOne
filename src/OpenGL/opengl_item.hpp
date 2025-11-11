@@ -1,7 +1,6 @@
 #ifndef OPENGLWINDOW_H
 #define OPENGLWINDOW_H
 
-#include "triangle_render.hpp"
 #include "OpenGLItemRenderer.hpp"
 #include <QTime>
 #include <QQuickFramebufferObject>

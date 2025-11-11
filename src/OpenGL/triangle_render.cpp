@@ -44,7 +44,8 @@ bool TriangleRender::render( const RenderContext& context ) {
         return false;
     }
 
-    glClearColor( m_clearColor.x(), m_clearColor.y(), m_clearColor.z(), m_clearColor.w() );
+    // glClearColor( m_clearColor.x(), m_clearColor.y(), m_clearColor.z(), m_clearColor.w() );
+    glClearColor( 0.0, 0.0, 0.0, 0.0);
     glClear( GL_COLOR_BUFFER_BIT );
 
     m_currentAngle += m_rotationSpeed;
@@ -70,7 +71,6 @@ bool TriangleRender::render( const RenderContext& context ) {
     // 绑定vbo
     m_vbo.bind();
 
-#ifdef Q_OS_WIN
     int location = 0;
 
     // 顶点位置
@@ -79,9 +79,7 @@ bool TriangleRender::render( const RenderContext& context ) {
     // 顶点颜色
     m_program.enableAttributeArray(location + 1);
     m_program.setAttributeBuffer(location + 1, GL_FLOAT, sizeof(QVector3D), 3, sizeof(VertexData) );
-#else
 
-#endif
     glDrawArrays( GL_TRIANGLES, 0, m_vertexCount );
 
     m_vbo.release();
