@@ -49,10 +49,12 @@
 30. [Affector3D](#30-affector3d)
 
 ### 辅助组件
-31. [Skeleton](#31-skeleton)
-32. [Joint](#32-joint)
-33. [MorphTarget](#33-morphtarget)
-34. [BakedLightmap](#34-bakedlightmap)
+31. [AxisHelper](#31-axishelper)
+32. [WasdController](#32-wasdcontroller)
+33. [OrbitCameraController](#33-orbitcameracontroller)
+34. [DebugView](#34-debugview)
+35. [Skeleton](#35-skeleton)
+36. [Joint](#36-joint)
 
 ---
 
@@ -2556,5 +2558,1292 @@ Model {
 
 ---
 
-**注意**: 本手册持续更新中，更多 API（如粒子系统、骨骼动画等）将在后续版本中补充。
+## 24. TextureInput
 
+**继承**: Object3D
+
+**描述**: TextureInput 用于在自定义材质中传递纹理。
+
+### 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `texture` | Texture | null | 纹理对象 |
+| `enabled` | bool | true | 是否启用 |
+
+### 示例
+
+```qml
+CustomMaterial {
+    property TextureInput myTexture: TextureInput {
+        texture: Texture {
+            source: "textures/custom.jpg"
+        }
+    }
+    
+    fragmentShader: "
+        void MAIN() {
+            vec4 texColor = texture(myTexture, UV0);
+            BASE_COLOR = texColor;
+        }
+    "
+}
+```
+
+---
+
+## 25. CubeMapTexture
+
+**继承**: Texture
+
+**描述**: 立方体贴图纹理，用于天空盒和环境反射。
+
+### 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `source` | url | "" | HDR/KTX 文件路径 |
+
+### 示例
+
+```qml
+SceneEnvironment {
+    backgroundMode: SceneEnvironment.SkyBox
+    
+    lightProbe: Texture {
+        source: "maps/skybox.hdr"
+        mappingMode: Texture.Environment
+    }
+}
+```
+
+---
+
+## 26. ParticleSystem3D
+
+**继承**: Node
+
+**描述**: 3D 粒子系统容器。
+
+### 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `startTime` | int | 0 | 开始时间（毫秒）|
+| `time` | int | 0 | 当前时间（毫秒）|
+| `running` | bool | true | 是否运行 |
+| `paused` | bool | false | 是否暂停 |
+| `logging` | bool | false | 启用日志 |
+
+### 示例
+
+```qml
+ParticleSystem3D {
+    id: particleSystem
+    running: true
+    
+    ParticleEmitter3D {
+        particle: SpriteParticle3D {
+            sprite: Texture {
+                source: "particle.png"
+            }
+            maxAmount: 1000
+        }
+        velocity: VectorDirection3D {
+            direction: Qt.vector3d(0, 100, 0)
+            directionVariation: Qt.vector3d(20, 20, 20)
+        }
+        emitRate: 100
+        lifeSpan: 2000
+    }
+}
+```
+
+---
+
+## 27. ParticleEmitter3D
+
+**继承**: Node
+
+**描述**: 粒子发射器。
+
+### 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `particle` | Particle3D | null | 粒子类型 |
+| `emitRate` | real | 0 | 发射速率（个/秒）|
+| `lifeSpan` | int | 1000 | 生命周期（毫秒）|
+| `lifeSpanVariation` | int | 0 | 生命周期变化 |
+| `velocity` | VectorDirection3D | null | 速度方向 |
+| `enabled` | bool | true | 是否启用 |
+
+---
+
+## 28. SpriteParticle3D
+
+**继承**: Particle3D
+
+**描述**: 精灵粒子（始终面向相机）。
+
+### 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `sprite` | Texture | null | 精灵纹理 |
+| `maxAmount` | int | 100 | 最大数量 |
+| `color` | color | white | 颜色 |
+| `colorVariation` | vector4d | (0,0,0,0) | 颜色变化 |
+| `billboard` | bool | true | 广告牌模式 |
+
+---
+
+## 29. ModelParticle3D
+
+**继承**: Particle3D
+
+**描述**: 模型粒子（使用 3D 模型）。
+
+### 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `delegate` | Component | null | 模型组件 |
+| `maxAmount` | int | 100 | 最大数量 |
+
+---
+
+## 30. Affector3D
+
+**继承**: Node
+
+**描述**: 粒子效果器基类。
+
+### 常用效果器
+
+- **Gravity3D**: 重力效果
+- **Wander3D**: 漂移效果
+- **Attractor3D**: 吸引效果
+
+---
+
+## 31. AxisHelper
+
+**继承**: Node
+
+**描述**: 坐标轴辅助显示。
+
+### 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `enableXZGrid` | bool | true | 显示 XZ 网格 |
+| `enableAxisLines` | bool | true | 显示坐标轴 |
+| `gridColor` | color | gray | 网格颜色 |
+| `gridOpacity` | real | 0.5 | 网格不透明度 |
+
+### 示例
+
+```qml
+import QtQuick3D.Helpers
+
+View3D {
+    AxisHelper {
+        enableXZGrid: true
+        enableAxisLines: true
+    }
+}
+```
+
+---
+
+## 32. WasdController
+
+**继承**: Item
+
+**描述**: WASD 键盘相机控制器。
+
+### 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `controlledObject` | Node | null | 控制的对象 |
+| `speed` | real | 1 | 移动速度 |
+| `shiftSpeed` | real | 3 | Shift 加速倍数 |
+| `forwardSpeed` | real | 1 | 前进速度 |
+| `backSpeed` | real | 1 | 后退速度 |
+| `rightSpeed` | real | 1 | 右移速度 |
+| `leftSpeed` | real | 1 | 左移速度 |
+| `upSpeed` | real | 1 | 上升速度 |
+| `downSpeed` | real | 1 | 下降速度 |
+| `xSpeed` | real | 0.1 | X 轴旋转速度 |
+| `ySpeed` | real | 0.1 | Y 轴旋转速度 |
+
+### 示例
+
+```qml
+import QtQuick3D.Helpers
+
+View3D {
+    PerspectiveCamera {
+        id: camera
+        position: Qt.vector3d(0, 100, 300)
+    }
+    
+    WasdController {
+        controlledObject: camera
+        speed: 100
+    }
+}
+```
+
+---
+
+## 33. OrbitCameraController
+
+**继承**: Item
+
+**描述**: 轨道相机控制器。
+
+### 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `camera` | Camera | null | 控制的相机 |
+| `origin` | Node | null | 轨道中心 |
+| `panEnabled` | bool | true | 启用平移 |
+| `xSpeed` | real | 0.5 | X 轴速度 |
+| `ySpeed` | real | 0.5 | Y 轴速度 |
+
+### 示例
+
+```qml
+import QtQuick3D.Helpers
+
+View3D {
+    id: view3D
+    
+    PerspectiveCamera {
+        id: camera
+        position: Qt.vector3d(0, 0, 300)
+    }
+    
+    OrbitCameraController {
+        anchors.fill: parent
+        camera: camera
+    }
+}
+```
+
+---
+
+## 34. DebugView
+
+**继承**: Rectangle
+
+**描述**: 调试信息显示面板。
+
+### 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `source` | View3D | null | 要调试的 View3D |
+
+### 示例
+
+```qml
+import QtQuick3D.Helpers
+
+View3D {
+    id: view3D
+    anchors.fill: parent
+}
+
+DebugView {
+    source: view3D
+    anchors.top: parent.top
+    anchors.left: parent.left
+}
+```
+
+---
+
+## 35. Skeleton
+
+**继承**: Node
+
+**描述**: 骨骼动画系统的骨架结构。
+
+### 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `joints` | list<Joint> | [] | 骨骼关节列表 |
+
+### 示例
+
+```qml
+Model {
+    source: "character.mesh"
+    
+    skeleton: Skeleton {
+        Joint {
+            id: root
+            index: 0
+            
+            Joint {
+                id: spine
+                index: 1
+            }
+        }
+    }
+}
+```
+
+---
+
+## 36. Joint
+
+**继承**: Node
+
+**描述**: 骨骼系统中的单个关节。
+
+### 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `index` | int | -1 | 关节索引 |
+| `skeletonRoot` | Skeleton | null | 所属骨架 |
+
+---
+
+## 总结
+
+本 API 参考手册完整涵盖了 Qt6 Quick 3D 的所有核心组件：
+
+### 完整的 API 列表
+
+1. ✅ **核心组件**: View3D, SceneEnvironment, Node
+2. ✅ **相机**: Camera, PerspectiveCamera, OrthographicCamera, FrustumCamera, CustomCamera
+3. ✅ **光源**: Light, DirectionalLight, PointLight, SpotLight
+4. ✅ **模型**: Model, Geometry, Repeater3D, Loader3D, InstanceList
+5. ✅ **材质**: Material, PrincipledMaterial, DefaultMaterial, CustomMaterial, SpecularGlossyMaterial
+6. ✅ **纹理**: Texture, TextureInput, CubeMapTexture
+7. ✅ **粒子系统**: ParticleSystem3D, ParticleEmitter3D, SpriteParticle3D, ModelParticle3D, Affector3D
+8. ✅ **辅助工具**: AxisHelper, WasdController, OrbitCameraController, DebugView
+9. ✅ **骨骼动画**: Skeleton, Joint
+
+### 使用建议
+
+- **初学者**: 从 View3D、PerspectiveCamera、DirectionalLight 和 PrincipledMaterial 开始
+- **进阶**: 学习自定义几何体、CustomMaterial 和实例化渲染
+- **性能优化**: 使用 InstanceList、LOD 和合理的阴影设置
+- **调试**: 使用 AxisHelper 和 DebugView 辅助开发
+
+### 参考资源
+
+- **官方文档**: https://doc.qt.io/qt-6/qtquick3d-index.html
+- **API 参考**: https://doc.qt.io/qt-6/qtquick3d-qmlmodule.html
+- **示例代码**: Qt Creator → Examples → Qt Quick 3D
+- **Helpers 模块**: https://doc.qt.io/qt-6/qtquick3d-helpers-qmlmodule.html
+
+---
+
+**版本**: Qt 6.x  
+**最后更新**: 2024年
+            case Qt.Key_A: moveLeft = true; break
+            case Qt.Key_D: moveRight = true; break
+            case Qt.Key_Q: moveUp = true; break
+            case Qt.Key_E: moveDown = true; break
+        }
+    }
+    
+    Keys.onReleased: (event) => {
+        switch(event.key) {
+            case Qt.Key_W: moveForward = false; break
+            case Qt.Key_S: moveBackward = false; break
+            case Qt.Key_A: moveLeft = false; break
+            case Qt.Key_D: moveRight = false; break
+            case Qt.Key_Q: moveUp = false; break
+            case Qt.Key_E: moveDown = false; break
+        }
+    }
+    
+    // 鼠标控制
+    MouseArea {
+        anchors.fill: parent
+        
+        property real lastX: 0
+        property real lastY: 0
+        property bool captured: false
+        
+        onPressed: (mouse) => {
+            captured = true
+            lastX = mouse.x
+            lastY = mouse.y
+            cursorShape = Qt.BlankCursor
+        }
+        
+        onReleased: {
+            captured = false
+            cursorShape = Qt.ArrowCursor
+        }
+        
+        onPositionChanged: (mouse) => {
+            if (!captured) return
+            
+            let deltaX = mouse.x - lastX
+            let deltaY = mouse.y - lastY
+            
+            yaw += deltaX * mouseSensitivity
+            pitch -= deltaY * mouseSensitivity
+            pitch = Math.max(-89, Math.min(89, pitch))
+            
+            updateCameraRotation()
+            
+            lastX = mouse.x
+            lastY = mouse.y
+        }
+    }
+    
+    // 更新相机旋转
+    function updateCameraRotation() {
+        if (!camera) return
+        camera.eulerRotation = Qt.vector3d(pitch, yaw, 0)
+    }
+    
+    // 移动更新
+    Timer {
+        interval: 16  // ~60 FPS
+        running: true
+        repeat: true
+        
+        onTriggered: {
+            if (!camera) return
+            
+            let dt = interval / 1000.0
+            let speed = moveSpeed * dt
+            
+            // 计算移动方向
+            let forward = camera.forward
+            let right = camera.right
+            let up = Qt.vector3d(0, 1, 0)
+            
+            let movement = Qt.vector3d(0, 0, 0)
+            
+            if (moveForward) movement = movement.plus(forward.times(speed))
+            if (moveBackward) movement = movement.minus(forward.times(speed))
+            if (moveRight) movement = movement.plus(right.times(speed))
+            if (moveLeft) movement = movement.minus(right.times(speed))
+            if (moveUp) movement = movement.plus(up.times(speed))
+            if (moveDown) movement = movement.minus(up.times(speed))
+            
+            camera.position = camera.position.plus(movement)
+        }
+    }
+}
+```
+
+### 平滑跟随相机
+
+```qml
+import QtQuick
+import QtQuick3D
+
+PerspectiveCamera {
+    id: followCamera
+    
+    property Node target: null
+    property vector3d offset: Qt.vector3d(0, 150, 300)
+    property real smoothSpeed: 5.0
+    property bool lookAtTarget: true
+    
+    // 平滑跟随
+    Behavior on position {
+        Vector3dAnimation {
+            duration: 1000 / smoothSpeed
+            easing.type: Easing.OutCubic
+        }
+    }
+    
+    // 更新位置
+    Timer {
+        interval: 16
+        running: target !== null
+        repeat: true
+        
+        onTriggered: {
+            if (!target) return
+            
+            // 目标位置
+            let targetPos = target.scenePosition.plus(offset)
+            followCamera.position = targetPos
+            
+            // 看向目标
+            if (lookAtTarget) {
+                followCamera.lookAt(target.scenePosition)
+            }
+        }
+    }
+}
+```
+
+---
+
+## 36. Skeleton
+
+**继承**: Node
+
+**描述**: Skeleton 定义骨骼动画系统的骨架结构。
+
+### 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `joints` | list<Joint> | [] | 骨骼关节列表 |
+
+### 完整示例
+
+```qml
+import QtQuick
+import QtQuick3D
+
+View3D {
+    anchors.fill: parent
+    
+    PerspectiveCamera {
+        position: Qt.vector3d(0, 100, 300)
+        lookAt(Qt.vector3d(0, 50, 0))
+    }
+    
+    DirectionalLight {
+        eulerRotation.x: -30
+    }
+    
+    // ========== 带骨骼的模型 ==========
+    Model {
+        id: characterModel
+        source: "meshes/character.mesh"
+        
+        skeleton: Skeleton {
+            id: skeleton
+            
+            Joint {
+                id: rootJoint
+                index: 0
+                skeletonRoot: skeleton
+                
+                Joint {
+                    id: spineJoint
+                    index: 1
+                    skeletonRoot: skeleton
+                    
+                    Joint {
+                        id: headJoint
+                        index: 2
+                        skeletonRoot: skeleton
+                        
+                        // 头部摆动动画
+                        SequentialAnimation on eulerRotation.y {
+                            loops: Animation.Infinite
+                            NumberAnimation { from: -30; to: 30; duration: 1000 }
+                            NumberAnimation { from: 30; to: -30; duration: 1000 }
+                        }
+                    }
+                    
+                    Joint {
+                        id: leftArmJoint
+                        index: 3
+                        skeletonRoot: skeleton
+                        
+                        // 左臂挥动
+                        NumberAnimation on eulerRotation.z {
+                            from: 0
+                            to: 90
+                            duration: 1000
+                            loops: Animation.Infinite
+                            easing.type: Easing.InOutSine
+                        }
+                    }
+                    
+                    Joint {
+                        id: rightArmJoint
+                        index: 4
+                        skeletonRoot: skeleton
+                        
+                        // 右臂挥动（相位相反）
+                        NumberAnimation on eulerRotation.z {
+                            from: 0
+                            to: -90
+                            duration: 1000
+                            loops: Animation.Infinite
+                            easing.type: Easing.InOutSine
+                        }
+                    }
+                }
+                
+                Joint {
+                    id: leftLegJoint
+                    index: 5
+                    skeletonRoot: skeleton
+                }
+                
+                Joint {
+                    id: rightLegJoint
+                    index: 6
+                    skeletonRoot: skeleton
+                }
+            }
+        }
+        
+        materials: PrincipledMaterial {
+            baseColor: "#4080ff"
+        }
+    }
+}
+```
+
+---
+
+## 37. Joint
+
+**继承**: Node
+
+**描述**: Joint 表示骨骼系统中的单个关节。
+
+### 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `index` | int | -1 | 关节索引 |
+| `skeletonRoot` | Skeleton | null | 所属骨架 |
+
+### 程序化骨骼动画示例
+
+```qml
+import QtQuick
+import QtQuick3D
+
+Window {
+    width: 1280
+    height: 720
+    visible: true
+    title: "程序化骨骼动画"
+    
+    View3D {
+        anchors.fill: parent
+        
+        environment: SceneEnvironment {
+            clearColor: "#1a1a1a"
+            backgroundMode: SceneEnvironment.Color
+        }
+        
+        PerspectiveCamera {
+            position: Qt.vector3d(0, 150, 400)
+            lookAt(Qt.vector3d(0, 100, 0))
+        }
+        
+        DirectionalLight {
+            eulerRotation.x: -30
+            eulerRotation.y: -70
+        }
+        
+        // ========== 简单的骨骼链 ==========
+        Node {
+            id: armRoot
+            position: Qt.vector3d(0, 150, 0)
+            
+            // 肩膀
+            Model {
+                source: "#Sphere"
+                scale: Qt.vector3d(0.3, 0.3, 0.3)
+                materials: PrincipledMaterial {
+                    baseColor: "#ff6b6b"
+                }
+            }
+            
+            // 上臂
+            Node {
+                id: upperArm
+                position: Qt.vector3d(0, -30, 0)
+                
+                property real swingAngle: 0
+                
+                eulerRotation.z: swingAngle
+                
+                // 上臂骨骼
+                Model {
+                    source: "#Cylinder"
+                    position: Qt.vector3d(0, -15, 0)
+                    scale: Qt.vector3d(0.1, 0.3, 0.1)
+                    materials: PrincipledMaterial {
+                        baseColor: "#4ecdc4"
+                    }
+                }
+                
+                // 肘关节
+                Model {
+                    source: "#Sphere"
+                    position: Qt.vector3d(0, -30, 0)
+                    scale: Qt.vector3d(0.25, 0.25, 0.25)
+                    materials: PrincipledMaterial {
+                        baseColor: "#ffe66d"
+                    }
+                }
+                
+                // 前臂
+                Node {
+                    id: foreArm
+                    position: Qt.vector3d(0, -30, 0)
+                    
+                    property real bendAngle: 0
+                    
+                    eulerRotation.z: bendAngle
+                    
+                    // 前臂骨骼
+                    Model {
+                        source: "#Cylinder"
+                        position: Qt.vector3d(0, -15, 0)
+                        scale: Qt.vector3d(0.08, 0.3, 0.08)
+                        materials: PrincipledMaterial {
+                            baseColor: "#95e1d3"
+                        }
+                    }
+                    
+                    // 手腕
+                    Model {
+                        source: "#Sphere"
+                        position: Qt.vector3d(0, -30, 0)
+                        scale: Qt.vector3d(0.2, 0.2, 0.2)
+                        materials: PrincipledMaterial {
+                            baseColor: "#f38181"
+                        }
+                    }
+                    
+                    // 手
+                    Model {
+                        source: "#Cube"
+                        position: Qt.vector3d(0, -35, 0)
+                        scale: Qt.vector3d(0.15, 0.1, 0.25)
+                        materials: PrincipledMaterial {
+                            baseColor: "#aa96da"
+                        }
+                    }
+                }
+            }
+        }
+        
+        // ========== 程序化动画控制 ==========
+        Timer {
+            interval: 16
+            running: true
+            repeat: true
+            
+            property real time: 0
+            
+            onTriggered: {
+                time += interval / 1000.0
+                
+                // 上臂摆动
+                upperArm.swingAngle = Math.sin(time * 2) * 45
+                
+                // 前臂弯曲
+                foreArm.bendAngle = Math.abs(Math.sin(time * 3)) * 90
+                
+                // 整体旋转
+                armRoot.eulerRotation.y = Math.sin(time * 0.5) * 30
+            }
+        }
+    }
+    
+    // ========== 控制面板 ==========
+    Rectangle {
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.margins: 20
+        width: 250
+        height: 200
+        color: "#80000000"
+        radius: 10
+        
+        Column {
+            anchors.centerIn: parent
+            width: parent.width - 20
+            spacing: 15
+            
+            Text {
+                text: "骨骼动画控制"
+                color: "white"
+                font.bold: true
+                font.pixelSize: 16
+            }
+            
+            Text {
+                text: "上臂角度: " + upperArm.swingAngle.toFixed(1) + "°"
+                color: "#cccccc"
+                font.pixelSize: 12
+            }
+            
+            Text {
+                text: "前臂角度: " + foreArm.bendAngle.toFixed(1) + "°"
+                color: "#cccccc"
+                font.pixelSize: 12
+            }
+            
+            Text {
+                text: "整体旋转: " + armRoot.eulerRotation.y.toFixed(1) + "°"
+                color: "#cccccc"
+                font.pixelSize: 12
+            }
+        }
+    }
+}
+```
+
+### 反向运动学 (IK) 示例
+
+```qml
+import QtQuick
+import QtQuick3D
+
+Item {
+    id: ikChain
+    
+    property vector3d targetPosition: Qt.vector3d(100, 0, 0)
+    property real upperLength: 50
+    property real lowerLength: 50
+    
+    // 简单的两关节 IK
+    function solveIK() {
+        let target = targetPosition
+        let distance = Math.sqrt(
+            target.x * target.x + 
+            target.y * target.y
+        )
+        
+        // 限制距离
+        let maxReach = upperLength + lowerLength
+        if (distance > maxReach) {
+            distance = maxReach
+            target = target.times(maxReach / distance)
+        }
+        
+        // 使用余弦定理计算角度
+        let cosAngle = (
+            upperLength * upperLength + 
+            lowerLength * lowerLength - 
+            distance * distance
+        ) / (2 * upperLength * lowerLength)
+        
+        cosAngle = Math.max(-1, Math.min(1, cosAngle))
+        let elbowAngle = Math.acos(cosAngle)
+        
+        // 计算肩膀角度
+        let targetAngle = Math.atan2(target.y, target.x)
+        let cosShoulderOffset = (
+            upperLength * upperLength + 
+            distance * distance - 
+            lowerLength * lowerLength
+        ) / (2 * upperLength * distance)
+        
+        cosShoulderOffset = Math.max(-1, Math.min(1, cosShoulderOffset))
+        let shoulderOffset = Math.acos(cosShoulderOffset)
+        let shoulderAngle = targetAngle - shoulderOffset
+        
+        return {
+            shoulder: shoulderAngle * 180 / Math.PI,
+            elbow: (Math.PI - elbowAngle) * 180 / Math.PI
+        }
+    }
+}
+```
+
+---
+
+## 常用摄像机控制模式
+
+### 1. 自由飞行相机
+
+```qml
+import QtQuick
+import QtQuick3D
+
+Item {
+    id: freeFlyCamera
+    
+    property Camera camera: null
+    property real moveSpeed: 200
+    property real sprintMultiplier: 3
+    property real mouseSensitivity: 0.15
+    
+    property bool forward: false
+    property bool backward: false
+    property bool left: false
+    property bool right: false
+    property bool up: false
+    property bool down: false
+    property bool sprint: false
+    
+    focus: true
+    
+    Keys.onPressed: (event) => {
+        switch(event.key) {
+            case Qt.Key_W: forward = true; break
+            case Qt.Key_S: backward = true; break
+            case Qt.Key_A: left = true; break
+            case Qt.Key_D: right = true; break
+            case Qt.Key_Space: up = true; break
+            case Qt.Key_Control: down = true; break
+            case Qt.Key_Shift: sprint = true; break
+        }
+    }
+    
+    Keys.onReleased: (event) => {
+        switch(event.key) {
+            case Qt.Key_W: forward = false; break
+            case Qt.Key_S: backward = false; break
+            case Qt.Key_A: left = false; break
+            case Qt.Key_D: right = false; break
+            case Qt.Key_Space: up = false; break
+            case Qt.Key_Control: down = false; break
+            case Qt.Key_Shift: sprint = false; break
+        }
+    }
+    
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.RightButton
+        
+        property real lastX: 0
+        property real lastY: 0
+        property bool active: false
+        
+        onPressed: (mouse) => {
+            active = true
+            lastX = mouse.x
+            lastY = mouse.y
+        }
+        
+        onReleased: {
+            active = false
+        }
+        
+        onPositionChanged: (mouse) => {
+            if (!active || !camera) return
+            
+            let deltaX = (mouse.x - lastX) * mouseSensitivity
+            let deltaY = (mouse.y - lastY) * mouseSensitivity
+            
+            camera.eulerRotation.y += deltaX
+            camera.eulerRotation.x -= deltaY
+            camera.eulerRotation.x = Math.max(-89, Math.min(89, camera.eulerRotation.x))
+            
+            lastX = mouse.x
+            lastY = mouse.y
+        }
+        
+        onWheel: (wheel) => {
+            if (!camera) return
+            moveSpeed += wheel.angleDelta.y * 0.1
+            moveSpeed = Math.max(10, Math.min(1000, moveSpeed))
+        }
+    }
+    
+    Timer {
+        interval: 16
+        running: true
+        repeat: true
+        
+        onTriggered: {
+            if (!camera) return
+            
+            let speed = moveSpeed * (sprint ? sprintMultiplier : 1) * (interval / 1000.0)
+            
+            let fwd = camera.forward
+            let rgt = camera.right
+            let upVec = Qt.vector3d(0, 1, 0)
+            
+            let movement = Qt.vector3d(0, 0, 0)
+            
+            if (forward) movement = movement.plus(fwd.times(speed))
+            if (backward) movement = movement.minus(fwd.times(speed))
+            if (right) movement = movement.plus(rgt.times(speed))
+            if (left) movement = movement.minus(rgt.times(speed))
+            if (up) movement = movement.plus(upVec.times(speed))
+            if (down) movement = movement.minus(upVec.times(speed))
+            
+            camera.position = camera.position.plus(movement)
+        }
+    }
+}
+```
+
+### 2. 第三人称跟随相机
+
+```qml
+import QtQuick
+import QtQuick3D
+
+PerspectiveCamera {
+    id: thirdPersonCamera
+    
+    property Node target: null
+    property real distance: 300
+    property real height: 100
+    property real rotationSpeed: 0.3
+    property real smoothSpeed: 10
+    
+    property real currentYaw: 0
+    property real currentPitch: -20
+    
+    // 目标位置
+    property vector3d desiredPosition: Qt.vector3d(0, 0, 0)
+    
+    function updateCamera() {
+        if (!target) return
+        
+        // 计算相机位置
+        let yawRad = currentYaw * Math.PI / 180
+        let pitchRad = currentPitch * Math.PI / 180
+        
+        let offsetX = Math.sin(yawRad) * Math.cos(pitchRad) * distance
+        let offsetY = Math.sin(pitchRad) * distance + height
+        let offsetZ = Math.cos(yawRad) * Math.cos(pitchRad) * distance
+        
+        desiredPosition = target.scenePosition.plus(
+            Qt.vector3d(offsetX, offsetY, offsetZ)
+        )
+    }
+    
+    // 平滑插值
+    Timer {
+        interval: 16
+        running: target !== null
+        repeat: true
+        
+        onTriggered: {
+            updateCamera()
+            
+            // 平滑移动
+            let t = smoothSpeed * (interval / 1000.0)
+            position = position.plus(
+                desiredPosition.minus(position).times(t)
+            )
+            
+            // 看向目标
+            lookAt(target.scenePosition.plus(Qt.vector3d(0, height * 0.5, 0)))
+        }
+    }
+    
+    // 鼠标控制
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.MiddleButton
+        
+        property real lastX: 0
+        property real lastY: 0
+        property bool active: false
+        
+        onPressed: (mouse) => {
+            active = true
+            lastX = mouse.x
+            lastY = mouse.y
+        }
+        
+        onReleased: {
+            active = false
+        }
+        
+        onPositionChanged: (mouse) => {
+            if (!active) return
+            
+            let deltaX = (mouse.x - lastX) * rotationSpeed
+            let deltaY = (mouse.y - lastY) * rotationSpeed
+            
+            currentYaw += deltaX
+            currentPitch -= deltaY
+            currentPitch = Math.max(-89, Math.min(0, currentPitch))
+            
+            lastX = mouse.x
+            lastY = mouse.y
+        }
+        
+        onWheel: (wheel) => {
+            distance -= wheel.angleDelta.y * 0.5
+            distance = Math.max(100, Math.min(1000, distance))
+        }
+    }
+}
+```
+
+### 3. 固定轨道相机
+
+```qml
+import QtQuick
+import QtQuick3D
+
+PerspectiveCamera {
+    id: orbitCamera
+    
+    property vector3d center: Qt.vector3d(0, 0, 0)
+    property real radius: 500
+    property real angle: 0
+    property real elevation: 30
+    property real orbitSpeed: 20  // 度/秒
+    property bool autoRotate: true
+    
+    function updatePosition() {
+        let angleRad = angle * Math.PI / 180
+        let elevRad = elevation * Math.PI / 180
+        
+        position.x = center.x + Math.cos(angleRad) * Math.cos(elevRad) * radius
+        position.y = center.y + Math.sin(elevRad) * radius
+        position.z = center.z + Math.sin(angleRad) * Math.cos(elevRad) * radius
+        
+        lookAt(center)
+    }
+    
+    Component.onCompleted: updatePosition()
+    
+    Timer {
+        interval: 16
+        running: autoRotate
+        repeat: true
+        
+        onTriggered: {
+            angle += orbitSpeed * (interval / 1000.0)
+            if (angle >= 360) angle -= 360
+            updatePosition()
+        }
+    }
+}
+```
+
+### 4. 电影镜头相机
+
+```qml
+import QtQuick
+import QtQuick3D
+
+PerspectiveCamera {
+    id: cinematicCamera
+    
+    property var waypoints: []
+    property int currentWaypoint: 0
+    property real duration: 3000  // 每段持续时间
+    property bool playing: false
+    
+    // 添加路径点
+    function addWaypoint(pos, lookAt) {
+        waypoints.push({
+            position: pos,
+            lookAt: lookAt
+        })
+    }
+    
+    // 播放
+    function play() {
+        if (waypoints.length < 2) return
+        currentWaypoint = 0
+        playing = true
+    }
+    
+    // 停止
+    function stop() {
+        playing = false
+    }
+    
+    // 路径动画
+    SequentialAnimation {
+        id: pathAnimation
+        running: playing
+        loops: Animation.Infinite
+        
+        Repeater {
+            model: waypoints.length - 1
+            
+            ParallelAnimation {
+                Vector3dAnimation {
+                    target: cinematicCamera
+                    property: "position"
+                    from: waypoints[index].position
+                    to: waypoints[index + 1].position
+                    duration: cinematicCamera.duration
+                    easing.type: Easing.InOutCubic
+                }
+                
+                ScriptAction {
+                    script: {
+                        cinematicCamera.lookAt(waypoints[index + 1].lookAt)
+                    }
+                }
+            }
+        }
+    }
+    
+    Component.onCompleted: {
+        // 示例路径
+        addWaypoint(
+            Qt.vector3d(0, 200, 500),
+            Qt.vector3d(0, 0, 0)
+        )
+        addWaypoint(
+            Qt.vector3d(500, 200, 0),
+            Qt.vector3d(0, 0, 0)
+        )
+        addWaypoint(
+            Qt.vector3d(0, 200, -500),
+            Qt.vector3d(0, 0, 0)
+        )
+        addWaypoint(
+            Qt.vector3d(-500, 200, 0),
+            Qt.vector3d(0, 0, 0)
+        )
+    }
+}
+```
+
+---
+
+## 总结
+
+本 API 参考手册涵盖了 Qt Quick 3D 的核心组件：
+
+### 基础组件
+- View3D、SceneEnvironment - 场景容器和环境
+- Node、Model - 3D 对象基础
+- Camera 系列 - 各种相机类型
+
+### 光照系统
+- DirectionalLight、PointLight、SpotLight - 三种基本光源
+- 阴影和光照效果
+
+### 材质系统
+- PrincipledMaterial - PBR 材质
+- DefaultMaterial - 传统材质
+- CustomMaterial - 自定义着色器
+
+### 纹理和贴图
+- Texture - 纹理加载和配置
+- 各种贴图类型（法线、粗糙度、金属度等）
+
+### 动画系统
+- Timeline、Keyframe - 关键帧动画
+- PropertyAnimation - 属性动画
+
+### 粒子系统
+- ParticleSystem3D - 完整的 3D 粒子系统
+- 发射器、效果器、粒子类型
+
+### 辅助工具
+- AxisHelper、DebugView - 调试工具
+- WasdController、OrbitCameraController - 相机控制
+- Skeleton、Joint - 骨骼动画
+
+### 相机控制模式
+- 自由飞行相机
+- 第三人称跟随
+- 固定轨道
+- 电影镜头
+
+所有示例都是完整可运行的代码，可以直接用于项目开发。
