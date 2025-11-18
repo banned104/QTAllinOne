@@ -3,15 +3,23 @@ import HuskarUI.Basic
 import lib.OpenGLItem 1.0
 import "src/QML_Files/Buttons"
 
+import Cpp.Painter 1.0
+
+
 HusWindow {
     width: 640
     height: 480
     visible: true
     title: qsTr("Hello World")
+    CppPainter {
+        z:-1;
+        anchors.fill: parent;
+    }
+
     Rectangle{
         id: rect1;
         anchors.fill: parent;
-        color: "grey";
+        color: "#1a1a1a22";
         HusButton {
             id: mainButton;
             width: 200; height: 50;

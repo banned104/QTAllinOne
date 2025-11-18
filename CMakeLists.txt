@@ -42,6 +42,8 @@ qt_add_qml_module(appQMLSQLite
 
 )
 
+add_subdirectory( src/cpp_painter )
+
 
 target_include_directories( appQMLSQLite PRIVATE
                         ${CMAKE_SOURCE_DIR}/src/CPP
@@ -62,6 +64,7 @@ target_link_directories( appQMLSQLite PRIVATE
                 $<$<CONFIG:Release>:${CMAKE_SOURCE_DIR}/HuskarUI/lib/bin>
                 )
 target_link_libraries(appQMLSQLite PRIVATE HuskarUIBasic)      # d 后缀 为Debug版本
+target_link_libraries( appQMLSQLite PRIVATE cppPainter )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

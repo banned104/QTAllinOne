@@ -1,0 +1,27 @@
+# YAML Front-matter Template for Qt Quick 3D Documentation
+# Copy this template to the top of each documentation file
+
+---
+title: [Component Name]
+tags:
+- QtQuick3D
+- [Category - choose from: Core, Rendering, Animation, Integration, Tools, Optimization]
+- 中文
+---
+
+# Category Options:
+# - Core: Basic 3D components (Model, Camera, Lights, etc.)
+# - Rendering: Rendering pipeline and effects
+# - Animation: Animation system components
+# - Integration: 2D/3D integration features
+# - Tools: Development tools (Balsam, Shadergen)
+# - Optimization: Performance and quality optimization
+
+# Example usage:
+# ---
+# title: Model
+# tags:
+# - QtQuick3D
+# - Core
+# - 中文
+# ---

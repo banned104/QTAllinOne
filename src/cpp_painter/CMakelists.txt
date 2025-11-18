@@ -1,0 +1,22 @@
+# 一定要开启这个
+set(CMAKE_AUTOMOC ON)
+
+qt_add_qml_module(cppPainter
+    URI Cpp.Painter
+    VERSION 1.0
+    OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Cpp/Painter"
+    SOURCES
+        cpp_painter.cpp
+        cpp_painter.hpp
+)
+
+# 连接QT模块
+target_link_libraries( cppPainter PRIVATE
+    Qt6::Core
+    Qt6::Quick
+)
+
+# 设置包含目录 (可选)
+# target_include_directories(cppPainter PUBLIC
+#     ${CMAKE_CURRENT_SOURCE_DIR}
+# )
