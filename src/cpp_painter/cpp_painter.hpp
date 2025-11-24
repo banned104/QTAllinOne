@@ -17,6 +17,10 @@ public:
         qDebug() << "Create Painter";
     }
 
+    Q_INVOKABLE void randomPaint();
+
+public slots:
+    void outputString(const QString& str);
 signals:
 private:
     QPoint trianglePos = {0,0};

@@ -12,6 +12,7 @@ HusWindow {
     visible: true
     title: qsTr("Hello World")
     CppPainter {
+        id: painter;
         z:-1;
         anchors.fill: parent;
     }
@@ -25,6 +26,12 @@ HusWindow {
             width: 200; height: 50;
             anchors.centerIn: parent;
             text: "HuskarUI";
+
+            onClicked: () => {
+                painter.randomPaint();
+                painter.outputString("haah");
+
+            }
         }
 
 

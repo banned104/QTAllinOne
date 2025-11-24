@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(QMLSQLite VERSION 0.1 LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_AUTOMOC ON)
@@ -33,6 +34,7 @@ qt_add_qml_module(appQMLSQLite
         src/OpenGL/render_factory.hpp
         src/OpenGL/OpenGLItemRenderer.cpp
         src/OpenGL/OpenGLItemRenderer.hpp
+        src/CPP/template_test.hpp
     QML_FILES
         Main.qml
         src/QML_Files/Buttons/ThreeDSwitch.qml
@@ -59,7 +61,7 @@ target_include_directories( appQMLSQLite PRIVATE
 
 # target_link_libraries(appQMLSQLite PRIVATE HuskarUIBasicd)      # d 后缀 为Debug版本
 set(QML_IMPORT_PATH "${CMAKE_SOURCE_DIR}/HuskarUI/plugins" CACHE STRING "" FORCE)
-target_link_directories( appQMLSQLite PRIVATE 
+target_link_directories( appQMLSQLite PRIVATE
                 $<$<CONFIG:Debug>:${CMAKE_SOURCE_DIR}/HuskarUI_Debug/lib/bin>
                 $<$<CONFIG:Release>:${CMAKE_SOURCE_DIR}/HuskarUI/lib/bin>
                 )

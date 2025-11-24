@@ -18,6 +18,9 @@
 // 测试深拷贝
 #include "src/CPP/DeepCopy.hpp"
 
+// 测试模板
+#include "src/CPP/template_test.hpp"
+
 
 int main(int argc, char *argv[]) {
   QGuiApplication app(argc, argv);
@@ -59,6 +62,8 @@ int main(int argc, char *argv[]) {
   // TestEcho();
 
   // TestStringClass();
+
+  TemplateTest();
 
   return app.exec();
 }
