@@ -3,3 +3,6 @@
 新的commit 1
 
 新的commit 2
+
+test rebase merge conflict
+
